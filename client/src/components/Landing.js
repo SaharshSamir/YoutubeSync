@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
+import { Link } from 'react-router-dom';
+// let socket;
 
-let socket;
 const Landing = () => {
     const [name, setName] = useState('');
     const [room, setRoom] = useState('');
-
-    socket = io.connect('http://localhost:3000');
-    console.log(socket);
+    // const ENDPOINT = "http://localhost:5000";
+    // useEffect(() => {
+    //     socket = io.connect(ENDPOINT, {
+    //         withCredentials: true
+    //     });
+    //     console.log(socket);
+    // }, [ENDPOINT]);
+    
 
     const setUsername = e => {
         setName(e.target.value);
@@ -15,18 +21,18 @@ const Landing = () => {
     const setRoomName = e => {
         setRoom(e.target.value);
     }
-
-    const submitFunc = (e) => {
+    const someError = e => {
         e.preventDefault();
-        console.log('submitted');
-        socket.emit('addUser', { name, room });
+        alert("Please fill in both the fields");
     }
     return (
         <div className="container">
-            <form onSubmit={e => submitFunc(e)}>
+            <form>
                 <input placeholder="Username" id="nameInput" onChange={e => setUsername(e)} />
                 <input placeholder="Room Name" id="roomInput" onChange={e => setRoomName(e)} />
-                <button className="btn btn-primary" type="submit">Join</button>
+                <Link onClick={e => (!room || !name) ? someError(e) : null} to={`/room?name=${name}&room=${room}`}>
+                    <button className="btn btn-primary" type="submit">Join</button>
+                </Link>
             </form>
         </div>
     );

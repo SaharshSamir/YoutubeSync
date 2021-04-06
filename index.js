@@ -1,31 +1,25 @@
 const express = require("express");
 const app = express();
-const http = require('http');
-const server = http.createServer(app);
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 const socket = require("socket.io");
+const socketReqs = require('./logic/socketReqs');
+require('./routes/routes')(app);
+
+
+
+const server = app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
+})
+
+app.get('/roomies', (req, res) => {
+    res.send({ "Hi": "there" });
+})
 
 const io = socket(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
-
-io.on('connection', socket => {
-    console.log('user has connected');
-})
-
-app.get("/", (req, res) => {
-    res.send({ hi: "there" });
-})
-
-app.get("/room/:id", (req, res) => {
-    res.send({
-        "roomId": req.params.id
-    })
-})
-
-server.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
-})
+socketReqs(io);

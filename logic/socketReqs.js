@@ -17,6 +17,7 @@ const socketReqs = io => {
             }
             socket.join(room);
             socket.emit('userAdded', newUser);
+            console.log(io.sockets.adapter.rooms[room])
         });
         socket.on("text", (payload) => {
             const { room } = payload;

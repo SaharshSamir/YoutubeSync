@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import Player from './player/player';
 import io from 'socket.io-client';
 import queryString from 'query-string';
 
@@ -8,7 +9,6 @@ const Room = ({ location }) => {
     let [name, setName] = useState('');
     let [room, setRoom] = useState('');
     let [text, setText] = useState('');
-    console.log(name)
     const ENDPOINT = 'http://localhost:8080';
     const history = useHistory();
     useEffect(() => {
@@ -26,15 +26,7 @@ const Room = ({ location }) => {
             history.push('/');
         })
     }, [ENDPOINT, location.search]);
-    useEffect(() => {
-        console.log("recieving text from server from useEffect")
-        socket.on("textServer", (payload) => {
-            console.log(payload.text);
-        })
-        socket.on("hi", greeting => {
-            console.log(greeting);
-        })
-    }, []);
+
     const handleSubmit = e => {
         e.preventDefault();
         setText(e.target.value);
@@ -57,7 +49,9 @@ const Room = ({ location }) => {
                 <button className="btn btn-primary" type="submit">Send</button>
             </form>
             <button className="btn btn-danger" onClick={e => leaveRoom(e)}>Leave room</button>
-
+            <div className="">
+                <Player />
+            </div>
         </div>
 
     )

@@ -1,0 +1,13 @@
+.timeLine{
+  width: 640px;
+  height: 35px;
+  margin-left: 10px;
+  float: left;
+}
+.line {
+    border-style: solid;
+    top: 50%;
+    position: relative;
+    border-width: 1px;
+}
+

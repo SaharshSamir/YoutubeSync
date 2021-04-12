@@ -3,7 +3,8 @@ import styles from './player.module.css'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 
-const Controls = () => {
+const Controls = (props) => {
+    const { socket, room } = props
     const line = <div className={styles.line} onClick={(e) => seekTo(e)}></div >
     let [player, setPlayer] = useState(0);
     let [left, setLeft] = useState("");
@@ -93,10 +94,30 @@ const Controls = () => {
     let pauseVideo;
     let playVideo;
     pauseVideo = () => {
-        player.pauseVideo();
+        socket.emit("pause-video", {room})
+        // player.pauseVideo();
+        // setPlayerState(player.getPlayerState());
     }
     playVideo = () => {
-        player.playVideo();
+        socket.emit("play-video", { room })
+        // console.log(socket);
+    }
+    
+    if (socket)
+    {
+        socket.on("play-video", () => {
+            if(player){
+                console.log(player)
+                player.playVideo();
+                setPlayerState(player.getPlayerState());
+            }
+        })
+        socket.on("pause-video", () => {
+            if(player){
+                player.pauseVideo();
+                setPlayerState(player.getPlayerState());
+            }
+        })
     }
 
     var done = false;
@@ -109,6 +130,13 @@ const Controls = () => {
     }
     // console.log(player);
     // timeline loop
+    const [playerState, setPlayerState] = useState(-1)
+
+    // if (playerReady && playerState == 1)
+    // {
+    // }
+    let [time, setTime] = useState('');
+    let min, sec;
     setInterval(() => {
         if (line == undefined || player == undefined)
         {
@@ -120,7 +148,11 @@ const Controls = () => {
             // console.log(player);
             // var fraction = "20";
             setLeft(fraction + "%");
-            // console.log(player.getCurrentTime()/60);
+            min = Math.floor((player.getCurrentTime() / 60));
+            min = (min < 10) ? '0' + min : min;
+            sec = Math.floor(player.getCurrentTime() % 60);
+            sec = (sec < 10) ? '0' + sec : sec;
+            setTime(`${min}:${sec}`);
         }
 
     }, 200)
@@ -130,15 +162,16 @@ const Controls = () => {
         position: 'relative',
         width: 'min-content',
         left: timeStampLeft,
-        top: '5px'
+        top: '5px',
+        marginLeft: '15px'
     }
-    const time = "2:11/10:00"
+
     const timeStamp = <p style={timeStampStyles}>{time}</p>
 
     return (
         <div className="d-flex flex-column">
             {/* <div id="player"></div> */}
-            <div className="d-flex justify-content-between" style={{ width: '750px' }}>
+            <div className="d-flex" style={{ width: '750px' }}>
                 <div className={styles.timeLine}>
                     {line}
                     {box}

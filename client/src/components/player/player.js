@@ -5,8 +5,9 @@ import '@material-ui/core';
 import styles from './player.module.css'
 import Controls from './controls'
 import { orange } from '@material-ui/core/colors';
+import { getThemeProps } from '@material-ui/styles';
 
-const Player = () => {
+const Player = (props) => {
     // console.log(styles.box);
     const cover = {
         height: '420px',
@@ -49,7 +50,7 @@ const Player = () => {
             {/* <Button variant="contained">
                 <PlayArrowIcon />
             </Button> */}
-            <Controls />
+            <Controls socket={props.socket} room={props.room}/>
         </div>
     )
 }

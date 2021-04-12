@@ -25,6 +25,14 @@ const socketReqs = io => {
             io.in(room).emit("textServer", payload);
         });
         socket.emit("hi", "hi from server");
+        socket.on("play-video", (payload) => {
+            const {room} = payload;
+            io.in(room).emit("play-video");
+        })
+        socket.on("pause-video", (payload) => {
+            const {room} = payload;
+            io.in(room).emit("pause-video");
+        })
         socket.on("disconnect", (reason) => {
             // console.log(reason);
             try

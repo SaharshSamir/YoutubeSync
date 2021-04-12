@@ -37,7 +37,7 @@ const addUser = (freshUser) => {
     }
 
 
-    console.log(rooms);
+    console.log(JSON.stringify(rooms));
     // console.log(`testing users: ${rooms[0].users[0].name}`)
 
     return newUser;

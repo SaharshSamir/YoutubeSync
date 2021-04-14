@@ -8,12 +8,6 @@ const Controls = (props) => {
     const line = <div className={styles.line} onClick={(e) => seekTo(e)}></div >
     let [player, setPlayer] = useState(0);
     let [left, setLeft] = useState("");
-    const seekTo = e => {
-        var videoLength = player.getDuration()
-        var timeOnClick = ((e.pageX - e.target.offsetLeft) / 640) * videoLength;
-        player.seekTo(timeOnClick);
-        console.log(timeOnClick / 60);
-    }
     const [playerReady, setPlayerReady] = useState(false);
     let boxStyles = {
         height: "15px",
@@ -54,7 +48,7 @@ const Controls = (props) => {
 
         // the Player object is created uniquely based on the id in props
         let something = new window.YT.Player('player-1.0', {
-            videoId: 'ddWKdSS5TaQ',
+            videoId: 'I2O7blSSzpI',
             height: '420px',
             width: '720px',
             playerVars: {
@@ -94,7 +88,7 @@ const Controls = (props) => {
     let pauseVideo;
     let playVideo;
     pauseVideo = () => {
-        socket.emit("pause-video", {room})
+        socket.emit("pause-video", { room })
         // player.pauseVideo();
         // setPlayerState(player.getPlayerState());
     }
@@ -102,20 +96,37 @@ const Controls = (props) => {
         socket.emit("play-video", { room })
         // console.log(socket);
     }
-    
+    const seekTo = e => {
+        var videoLength = player.getDuration()
+        var timeOnClick = ((e.pageX - e.target.offsetLeft) / 640) * videoLength;
+        // socket.emit("seek-video", { timeOnClick, room });
+        player.seekTo(timeOnClick);
+    }
+
     if (socket)
     {
         socket.on("play-video", () => {
-            if(player){
-                console.log(player)
+            if (player)
+            {
+                // console.log(player)
+                console.log("play");
                 player.playVideo();
                 setPlayerState(player.getPlayerState());
             }
         })
         socket.on("pause-video", () => {
-            if(player){
+            if (player)
+            {
+                console.log("pause");
                 player.pauseVideo();
                 setPlayerState(player.getPlayerState());
+            }
+        })
+        socket.on("seek-video", payload => {
+            if (player)
+            {
+                console.log(payload);
+                player.seekTo(payload.timeOnClick);
             }
         })
     }

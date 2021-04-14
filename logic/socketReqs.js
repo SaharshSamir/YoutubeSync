@@ -25,13 +25,24 @@ const socketReqs = io => {
             io.in(room).emit("textServer", payload);
         });
         socket.emit("hi", "hi from server");
+        //play video
         socket.on("play-video", (payload) => {
-            const {room} = payload;
+            console.log("play")
+            const { room } = payload;
             io.in(room).emit("play-video");
         })
+        //pause video
         socket.on("pause-video", (payload) => {
-            const {room} = payload;
+            console.log("pause");
+            const { room } = payload;
             io.in(room).emit("pause-video");
+        })
+        //seek video
+        socket.on("seek-video", payload => {
+            console.log(payload);
+            var { room, timeOnClick } = payload;
+            io.in(room).emit("seek-video", timeOnClick);
+
         })
         socket.on("disconnect", (reason) => {
             // console.log(reason);
@@ -44,8 +55,10 @@ const socketReqs = io => {
                 deleteUser(socket.id);
                 // console.log(socket.rooms);
             } catch (err)
-            {   if(err){
-                console.log(err);
+            {
+                if (err)
+                {
+                    console.log(err);
                 }
             }
         })

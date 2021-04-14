@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 const Landing = () => {
     const [name, setName] = useState('');
     const [room, setRoom] = useState('');
+    const [users, setUsers] = useState([]);
     // const ENDPOINT = "http://localhost:5000";
     // useEffect(() => {
     //     socket = io.connect(ENDPOINT, {
@@ -13,7 +14,7 @@ const Landing = () => {
     //     });
     //     console.log(socket);
     // }, [ENDPOINT]);
-    
+
 
     const setUsername = e => {
         setName(e.target.value);
@@ -25,6 +26,10 @@ const Landing = () => {
         e.preventDefault();
         alert("Please fill in both the fields");
     }
+    // let handleSubmit = e => {
+    //     console.log(e.target);
+    // }
+
     return (
         <div className="container">
             <form>

@@ -41,6 +41,7 @@ const Room = ({ location }) => {
         socket.disconnect();
         history.push('/');
     }
+
     return (
         <div className="container">
             <p>Room Page {room}</p>
@@ -50,7 +51,7 @@ const Room = ({ location }) => {
             </form>
             <button className="btn btn-danger" onClick={e => leaveRoom(e)}>Leave room</button>
             <div className="">
-                <Player socket={socket} room={room}/>
+                <Player socket={socket} room={room} />
             </div>
         </div>
 

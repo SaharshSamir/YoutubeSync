@@ -41,14 +41,14 @@ const Controls = (props) => {
     const onPlayerReady = event => {
         // event.target.playVideo();
         setPlayerReady(true);
-
     };
+    // console.log()
     const loadVideo = () => {
         // const { id } = this.props;
 
         // the Player object is created uniquely based on the id in props
         let something = new window.YT.Player('player-1.0', {
-            videoId: 'I2O7blSSzpI',
+            videoId: 'rv3Yq-B8qp4',
             height: '420px',
             width: '720px',
             playerVars: {
@@ -99,36 +99,63 @@ const Controls = (props) => {
     const seekTo = e => {
         var videoLength = player.getDuration()
         var timeOnClick = ((e.pageX - e.target.offsetLeft) / 640) * videoLength;
-        // socket.emit("seek-video", { timeOnClick, room });
-        player.seekTo(timeOnClick);
+        socket.emit("seek-video", { timeOnClick, room });
+        // player.seekTo(timeOnClick);
     }
 
     if (socket)
     {
-        socket.on("play-video", () => {
+        socket.off("play-video");
+        socket.once("play-video", () => {
             if (player)
             {
                 // console.log(player)
                 console.log("play");
                 player.playVideo();
                 setPlayerState(player.getPlayerState());
+                console.log(player.getPlayerState())
+
             }
         })
-        socket.on("pause-video", () => {
+        socket.off("pause-video");
+        socket.once("pause-video", () => {
             if (player)
             {
+                console.log(player);
                 console.log("pause");
                 player.pauseVideo();
                 setPlayerState(player.getPlayerState());
+                console.log(player.getPlayerState())
             }
         })
-        socket.on("seek-video", payload => {
+        socket.off("seek-video");
+        socket.once("seek-video", payload => {
             if (player)
             {
                 console.log(payload);
-                player.seekTo(payload.timeOnClick);
+
+                // player.pauseVideo();
+                // setPlayerState(player.getPlayerState());
+                player.seekTo(payload);
+                console.log(player.getPlayerState());
+                // player.playVideo();
+                // setPlayerState(player.getPlayerState());
+
             }
         })
+        socket.off("setVidId");
+        socket.once("setVidId", (vidId) => {
+            if (player)
+            {
+                vidId ? player.loadVideoById(vidId) : null;
+
+            }
+        })
+        // if (player)
+        // {
+        //     player.loadVideoById(props.vidId);
+        // }
+
     }
 
     var done = false;

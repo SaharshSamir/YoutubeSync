@@ -34,6 +34,7 @@ const Player = (props) => {
     // }, 5000)
     // boxStyles.borderColor = "green";
     // console.log(player.getVideoUrl())
+
     return (
         <div className="container d-flex flex-column ">
             {/* <div style={cover}></div> */}
@@ -50,7 +51,7 @@ const Player = (props) => {
             {/* <Button variant="contained">
                 <PlayArrowIcon />
             </Button> */}
-            <Controls socket={props.socket} room={props.room}/>
+            <Controls socket={props.socket} room={props.room} vidId={props.vidId} />
         </div>
     )
 }

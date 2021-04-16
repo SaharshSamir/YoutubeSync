@@ -17,6 +17,7 @@ const socketReqs = io => {
             }
             socket.join(room);
             socket.emit('userAdded', newUser);
+            io.in(room).emit("new-user", name);
             console.log(io.sockets.adapter.rooms[room])
         });
         socket.on("text", (payload) => {
@@ -43,6 +44,13 @@ const socketReqs = io => {
             var { room, timeOnClick } = payload;
             io.in(room).emit("seek-video", timeOnClick);
 
+        })
+        //set video
+        socket.on("vidId", payload => {
+
+            var {vidId, room} = payload;
+            console.log(vidId);
+            io.in(room).emit("setVidId", vidId);
         })
         socket.on("disconnect", (reason) => {
             // console.log(reason);

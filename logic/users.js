@@ -7,6 +7,7 @@ const rooms = [];
 const addUser = (freshUser) => {
     let { name, room, id } = freshUser
     let searchRoom = room.trim().toLowerCase();
+    let thisRoom;
     name = name.trim().toLowerCase();
     let newUser = { id, name, isAdmin: false };
     let newRoom = {
@@ -18,6 +19,7 @@ const addUser = (freshUser) => {
     {
         //if the room already exists
         const currentRoom = rooms.find(room => room.roomName === searchRoom);
+        thisRoom = currentRoom;
         const existingUser = currentRoom.users.find((user) => user.name === name);
         // console.log(existingUser);
         if (existingUser)
@@ -40,7 +42,7 @@ const addUser = (freshUser) => {
     console.log(JSON.stringify(rooms));
     // console.log(`testing users: ${rooms[0].users[0].name}`)
 
-    return newUser;
+    return { newUser, thisRoom };
 }
 
 // const getUserInRoom = (room) => {

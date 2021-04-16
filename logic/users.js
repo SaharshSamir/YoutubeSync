@@ -3,9 +3,8 @@
 // const users = [];
 const rooms = [];
 
-
 const addUser = (freshUser, videoId, io, socket) => {
-    let { name, room, id } = freshUser
+    let { name, room, id } = freshUser;
     let searchRoom = room.trim().toLowerCase();
     let thisRoom;
     name = name.trim().toLowerCase();
@@ -14,12 +13,12 @@ const addUser = (freshUser, videoId, io, socket) => {
         roomName: room,
         totalUsers: 1,
         vidId: videoId,
-        users: []
-    }
-    if (rooms.filter(room => room.roomName === searchRoom).length > 0)
+        users: [],
+    };
+    if (rooms.filter((room) => room.roomName === searchRoom).length > 0)
     {
         //if the room already exists
-        const currentRoom = rooms.find(room => room.roomName === searchRoom);
+        const currentRoom = rooms.find((room) => room.roomName === searchRoom);
         thisRoom = currentRoom;
         const existingUser = currentRoom.users.find((user) => user.name === name);
         // console.log(existingUser);
@@ -32,7 +31,6 @@ const addUser = (freshUser, videoId, io, socket) => {
         console.log(JSON.stringify(rooms));
         socket.emit("videoForNewUser", currentRoom.vidId);
         return { newUser, thisRoom };
-
     } else
     {
         //if the room doesn't exist
@@ -43,43 +41,41 @@ const addUser = (freshUser, videoId, io, socket) => {
         io.emit("setVidId", newRoom.vidId);
         console.log(JSON.stringify(rooms));
         return { newUser, thisRoom };
-
     }
-
 
     console.log(JSON.stringify(rooms));
     // console.log(`testing users: ${rooms[0].users[0].name}`)
 
     return { newUser, thisRoom };
-}
+};
 
 const getUsersInRoom = (room) => {
-    const currentRoom = rooms.find(i => i.roomName === room);
+    const currentRoom = rooms.find((i) => i.roomName === room);
     // console.log(room + 'line50');
     // console.log(currentRoom);
-    let usrNames = currentRoom.users.map(usr => {
+    let usrNames = currentRoom.users.map((usr) => {
         return usr.name;
-    })
+    });
     // console.log(usrNames);
     return usrNames;
-}
+};
 
 const setVidId = (payload) => {
     var { vidId, room } = payload;
-    rooms.find(i => i.roomName === room).vidId = vidId;
-    console.log(rooms.find(i => i.roomName === room));
-}
+    rooms.find((i) => i.roomName === room).vidId = vidId;
+    console.log(rooms.find((i) => i.roomName === room));
+};
 
 const getVideoId = (room) => {
     // const currentRoom = rooms.find(i => i.roomName === room);
     // console.log(currentRoom);
     // return currentRoom.vidId;
-}
+};
 const getRoomForId = (room) => {
-    const currentRoom = rooms.find(i => i.roomName === room);
-    console.log(currentRoom + 'line80 user.js');
+    const currentRoom = rooms.find((i) => i.roomName === room);
+    console.log(currentRoom + "line80 user.js");
     return currentRoom;
-}
+};
 
 const deleteUser = (id) => {
     var i = 0;
@@ -89,9 +85,7 @@ const deleteUser = (id) => {
     // console.log(`we are searching for ${userId} which is a ${typeof (userId)}`);
     while (i < rooms.length)
     {
-        userFound = rooms[i].users.find((user) =>
-            user.id === userId
-        )
+        userFound = rooms[i].users.find((user) => user.id === userId);
         if (userFound)
         {
             roomFoundAt = i;
@@ -104,7 +98,10 @@ const deleteUser = (id) => {
     if (userFound)
     {
         // console.log(`found: ${userFound}`);
-        deletedUser = rooms[roomFoundAt].users.splice(rooms[roomFoundAt].users.indexOf(userFound), 1);
+        deletedUser = rooms[roomFoundAt].users.splice(
+            rooms[roomFoundAt].users.indexOf(userFound),
+            1
+        );
         rooms[roomFoundAt].totalUsers = rooms[roomFoundAt].users.length;
         if (rooms[roomFoundAt].totalUsers === 0)
         {
@@ -120,18 +117,21 @@ const deleteUser = (id) => {
             return rooms[roomFoundAt];
         }
         console.log(JSON.stringify(rooms));
-        console.log(JSON.stringify(deletedUser) + " line107")
+        console.log(JSON.stringify(deletedUser) + " line107");
         // return { userDeleted: deletedUser[0], room: rooms[roomFoundAt] };
         return rooms[roomFoundAt];
     } else
     {
-        console.log("user not found")
+        console.log("user not found");
     }
     console.log(JSON.stringify(rooms));
+};
 
-
-
-}
-
-module.exports = { addUser, deleteUser, getUsersInRoom, getVideoId, setVidId, getRoomForId };
-
+module.exports = {
+    addUser,
+    deleteUser,
+    getUsersInRoom,
+    getVideoId,
+    setVidId,
+    getRoomForId,
+};

@@ -31,12 +31,14 @@ const Landing = () => {
     // }
 
     return (
-        <div className="container">
-            <form>
-                <input placeholder="Username" id="nameInput" onChange={e => setUsername(e)} />
-                <input placeholder="Room Name" id="roomInput" onChange={e => setRoomName(e)} />
+        <div style={{ height: "100vh" }} className="container d-flex align-items-center justify-content-center">
+            <form className="d-flex flex-column from-group">
+                <p className="mb-1 mt-2">Username</p>
+                <input placeholder="Username" className="form-control-lg" id="nameInput" onChange={e => setUsername(e)} />
+                <p className="mb-1 mt-2">Room Name</p>
+                <input placeholder="Room Name" className="form-control-lg" id="roomInput" onChange={e => setRoomName(e)} />
                 <Link onClick={e => (!room || !name) ? someError(e) : null} to={`/room?name=${name}&room=${room}`}>
-                    <button className="btn btn-primary" type="submit">Join</button>
+                    <button className="btn btn-primary btn-lg m-3 ml-5" type="submit">Join</button>
                 </Link>
             </form>
         </div>

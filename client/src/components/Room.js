@@ -33,8 +33,8 @@ const Room = ({ location }) => {
         e.preventDefault();
         const link = new URL(text);
         // console.log("hi");
-        setVidId(link.search.split("=")[1].split("&")[0]);
-        socket.emit("vidId", { vidId, room });
+        // setVidId();
+        socket.emit("vidId", { vidId: link.search.split("=")[1].split("&")[0], room });
         // setVidId(vidId.split("&")[0]);
         e.target.firstChild.value = '';
     }
@@ -54,14 +54,16 @@ const Room = ({ location }) => {
         <div className="container">
             <PlayerList socket={socket} />
             <p>Room Page {room}</p>
-            <form onSubmit={(e) => handleSubmit(e)}>
-                <input placeholder="text" onChange={e => { setText(e.target.value) }}></input>
-                <button className="btn btn-primary" type="submit">Send</button>
-            </form>
-            <button className="btn btn-danger" onClick={e => leaveRoom(e)}>Leave room</button>
-            <div className="">
-                <Player socket={socket} room={room} vidId={vidId} />
+            <div className="d-flex flex-column">
+                <form onSubmit={(e) => handleSubmit(e)} >
+                    <input placeholder="text" onChange={e => { setText(e.target.value) }}></input>
+                    <button className="btn btn-primary ml-3" type="submit">Search</button>
+                </form>
+                <div className="m-4">
+                    <Player socket={socket} room={room} vidId={vidId} />
+                </div>
             </div>
+            <button className="btn btn-danger" style={{ right: '10px', position: 'absolute' }} onClick={e => leaveRoom(e)}>Leave room</button>
         </div>
 
     )

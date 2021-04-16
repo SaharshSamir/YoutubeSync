@@ -40,6 +40,10 @@ const Controls = (props) => {
 
     const onPlayerReady = event => {
         // event.target.playVideo();
+        if (socket)
+        {
+            socket.emit("giveVidId", { room });
+        }
         setPlayerReady(true);
     };
     // console.log()
@@ -103,6 +107,15 @@ const Controls = (props) => {
         // player.seekTo(timeOnClick);
     }
 
+    useEffect(() => {
+        if (socket)
+        {
+            console.log('helloooo')
+            socket.emit("giveVidId", { room })
+        }
+    })
+
+
     if (socket)
     {
         socket.off("play-video");
@@ -121,7 +134,8 @@ const Controls = (props) => {
         socket.once("pause-video", () => {
             if (player)
             {
-                console.log(player);
+                // console.log(player.videoData.video_id);
+                console.log(player.playerInfo.videoData.video_id);
                 console.log("pause");
                 player.pauseVideo();
                 setPlayerState(player.getPlayerState());
@@ -147,10 +161,25 @@ const Controls = (props) => {
         socket.once("setVidId", (vidId) => {
             if (player)
             {
-                vidId ? player.loadVideoById(vidId) : null;
+                // let test = vidId ? player.loadVideoById(vidId) : null;
+                if (vidId)
+                {
+                    player.loadVideoById(vidId);
+                    player.stopVideo();
+                }
 
             }
         })
+        // socket.off("videoForNewUser");
+        // socket.once("videoForNewUser", vidId => {
+        //     console.log("hi");
+        //     if (player && vidId)
+        //     {
+        //         console.log(vidId);
+        //         player.loadVideoById(vidId);
+        //         player.stopVideo();
+        //     }
+        // })
         // if (player)
         // {
         //     player.loadVideoById(props.vidId);

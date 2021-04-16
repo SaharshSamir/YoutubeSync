@@ -1,4 +1,4 @@
-const { addUser, deleteUser } = require('./users');
+const { addUser, deleteUser, getUsersInRoom, getVideoId, setVidId, getRoomForId } = require('./users');
 
 const socketReqs = io => {
     io.on('connection', socket => {
@@ -10,22 +10,27 @@ const socketReqs = io => {
                 name,
                 room
             }
-            const { newUser, error } = addUser(freshUser);
+            const videoId = 'ScMzIvxBSi4'
+            const { newUser, error } = addUser(freshUser, videoId, io, socket);
             if (error)
             {
                 return callback(error);
             }
+            // console.log(JSON.stringify(newUser));
             socket.join(room);
             socket.emit('userAdded', newUser);
-            io.in(room).emit("new-user", name);
-            console.log(io.sockets.adapter.rooms[room])
+            const usrs = getUsersInRoom(room);
+            io.in(newUser.roomName).emit()
+            io.in(room).emit("new-user", usrs);
+
         });
-        socket.on("text", (payload) => {
-            const { room } = payload;
-            console.log("log")
-            io.in(room).emit("textServer", payload);
-        });
-        socket.emit("hi", "hi from server");
+        //user wants video id
+
+        // socket.once("giveVidId", ({ room }) => {
+        //     var room = getRoomForId(room)
+        //     console.log(room.vidId + 'line - 30');
+        //     socket.emit("videoForNewUser", room.vidId);
+        // })
         //play video
         socket.on("play-video", (payload) => {
             console.log("play")
@@ -47,8 +52,9 @@ const socketReqs = io => {
         })
         //set video
         socket.on("vidId", payload => {
+            setVidId(payload)
 
-            var {vidId, room} = payload;
+            var { vidId, room } = payload;
             console.log(vidId);
             io.in(room).emit("setVidId", vidId);
         })
@@ -61,6 +67,11 @@ const socketReqs = io => {
                 //     const deletedUser = deleteUser(socket.id);
                 // }
                 deleteUser(socket.id);
+                // var { userDeleted, room } = obj;
+                // const usrs = getUsersInRoom(room);
+                // io.in(room).emit("new-user", usrs);
+                // console.log(userDeleted + " line65");
+                // socket.in(room).emit("user-deleted", userDeleted.name);
                 // console.log(socket.rooms);
             } catch (err)
             {

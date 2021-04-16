@@ -37,7 +37,7 @@ const Player = (props) => {
 
     return (
         <div className="container d-flex flex-column ">
-            {/* <div style={cover}></div> */}
+            <div style={cover}></div>
             <div id="player-1.0"></div>
             {/* <iframe id="player" type="text/html" width="640" height="390"
                 src="http://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1"

@@ -3,6 +3,10 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const socket = require("socket.io");
 const socketReqs = require('./logic/socketReqs');
+app.get("/", (req, res) => {
+    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    console.log(fullUrl + 'line8');
+})
 require('./routes/routes')(app);
 
 

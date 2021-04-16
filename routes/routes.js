@@ -1,7 +1,4 @@
 const appRoutes = app => {
-    app.get("/", (req, res) => {
-        res.send({ hi: "there" });
-    })
 
     app.get("/room/:id", (req, res) => {
         res.send({

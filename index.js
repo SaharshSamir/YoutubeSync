@@ -3,8 +3,10 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const socket = require("socket.io");
 const socketReqs = require('./logic/socketReqs');
+const domainName = "http://localhost:3000"
 app.get("/", (req, res) => {
     var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    domainName = fullUrl;
     console.log(fullUrl + 'line8');
 })
 require('./routes/routes')(app);
@@ -21,7 +23,7 @@ app.get('/roomies', (req, res) => {
 
 const io = socket(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: domainName,
         methods: ["GET", "POST"],
         credentials: true
     }
